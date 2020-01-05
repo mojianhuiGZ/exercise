@@ -1,5 +1,8 @@
 `include "regfile.h"
 
+`ifndef _REGFILE_V
+`define _REGFILE_V
+
 module regfile (
     input wire clk,
     input wire reset_,
@@ -19,3 +22,5 @@ always @(posedge clk or negedge reset_)
         mem[addr] <= #1 din;
     end
 endmodule
+
+`endif
