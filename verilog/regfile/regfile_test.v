@@ -1,7 +1,6 @@
 `timescale 1ns/1ps
 
 `include "regfile.h"
-`include "regfile.v"
 
 module regfile_test;
 
@@ -14,7 +13,7 @@ reg [`DATABUS] din;
 wire [`DATABUS] dout;
 integer i;
 
-regfile regfile1(
+regfile regfile(
     .clk (clk),
     .reset_ (reset_),
     .we_ (we_),
@@ -27,20 +26,36 @@ always #(PERI/2) begin
 end
 
 initial begin
+    #0 begin
+        clk <= `LOW;
+        reset_ <= `DISABLE_;
+        we_ <= `DISABLE_;
+        addr <= `ADDR_W'bx;
+        din <= `DATA_W'bx;
+    end
+    #(PERI/2) reset_ <= #1 `ENABLE_;
+    #(PERI/2) reset_ <= #1 `DISABLE_;
+    #0 begin
+        for (i = 0; i < `DATA_D; i++) begin
+            #PERI begin
+                we_ <= #1 `DISABLE_;
+                addr <= #1 i;
+            end
+            #PERI begin
+                we_ <= #1 `ENABLE_;
+                din <= #1 i+1;
+            end
+            #PERI begin
+                we_ <= #1 `DISABLE_;
+            end
+        end
+    end
+    $finish;
+end
+
+initial begin
     $dumpfile("regfile_test.vcd");
     $dumpvars(0, regfile_test);
-    clk = 1'b0;
-    reset_ = 1'b1;
-    we_ = 1'b1;
-    addr = `ADDR_W'bx;
-    din = `DATA_W'bx;
-    repeat(1) @(negedge clk);
-    reset_ = 1'b0;
-    repeat(1) @(posedge clk);
-    reset_ = 1'b1;
-    addr = `ADDR_W'b0;
-    repeat(1) @(posedge clk);
-    $finish;
 end
 
 endmodule

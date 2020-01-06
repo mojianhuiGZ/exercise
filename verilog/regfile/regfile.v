@@ -1,8 +1,5 @@
 `include "regfile.h"
 
-`ifndef _REGFILE_V
-`define _REGFILE_V
-
 module regfile (
     input wire clk,
     input wire reset_,
@@ -14,13 +11,12 @@ module regfile (
 reg [`DATABUS] mem[0:`DATA_D];
 integer i;
 assign dout = mem[addr];
-always @(posedge clk or negedge reset_)
+always @(posedge clk or negedge reset_) begin
     if (reset_ == `ENABLE_) begin
         for (i = 0; i < `DATA_D; i = i + 1)
-            mem[addr] <= #1 `DATA_W'h0;
+            mem[i] <= #1 `DATA_W'h0;
     end else if (we_ == `ENABLE_) begin
         mem[addr] <= #1 din;
     end
+end
 endmodule
-
-`endif
