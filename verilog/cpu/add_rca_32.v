@@ -1,15 +1,23 @@
-//ripple-carry adder
+/*
+ * ripple-carry adder
+ */
+
+// RCA adder 4bit
 module add_rca_4(a, b, cin, s, cout);
 input wire [3:0] a, b;
 input wire cin;
 output wire [3:0] s;
 output wire cout;
 
-wire c1;
+wire c1, c2, c3;
 
-fulladder(.a(), .b(), .s(), );
+fulladder(.a(a[0]), .b(b[0]), .cin(cin), .s(s[0]), .cout(c1));
+fulladder(.a(a[1]), .b(b[1]), .cin(c1), .s(s[0]), .cout(c2));
+fulladder(.a(a[2]), .b(b[2]), .cin(c2), .s(s[0]), .cout(c3));
+fulladder(.a(a[3]), .b(b[3]), .cin(c3), .s(s[0]), .cout(cout));
 endmodule
 
+// RCA adder 8bit
 module add_rca_8(a, b, cin, s, cout);
 input wire [7:0] a, b;
 input wire cin;
@@ -22,6 +30,7 @@ add_rca_4 m1(a[3:0], b[3:0], cin, s[3:0], c1);
 add_rca_4 m2(a[7:4], b[7:4], c1, s[7:4], cout);
 endmodule
 
+// RCA adder 32bit
 module add_rca_32(a, b, cin, s, cout);
 input wire [31:0] a, b;
 input wire cin;
