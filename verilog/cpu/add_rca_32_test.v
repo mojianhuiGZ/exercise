@@ -2,9 +2,7 @@
 
 module add_rca_32_test;
 
-parameter PERI = 10;
-
-wire cin;
+reg cin;
 reg [31:0] a;
 reg [31:0] b;
 wire [31:0] s;
@@ -19,13 +17,11 @@ add_rca_32 adder1(
 
 initial begin
     #0 begin
-        for (i = 0; i < 10; i++) begin
-			a <= i;
-			b <= i;
-			cin <= 0;
-            #1
-        end
+        a <= 32'h12345678;
+        b <= 32'hffffffff;
+        cin <= 0;
     end
+    #1
     $finish;
 end
 

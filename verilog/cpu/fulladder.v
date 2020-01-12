@@ -1,7 +1,7 @@
-module fulladder(
-    input wire a, b, cin,
-    output wire s, cout
-);
+module fulladder(a, b, cin, s, cout);
+input wire a, b, cin;
+output wire s, cout;
+
 wire p, g;
 
 assign p = a ^ b;
